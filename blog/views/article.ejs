@@ -1,0 +1,101 @@
+<% include header %>
+
+<!-- 文章详情页面 -->
+<h1 id="title" data-userid='<%= userid %>' data-aid='<%= aid %>'><%= article.title %></h1>
+<p ><%- article.content %></p>
+
+
+作者：<span><%= article.username %></span>
+
+发布时间：<span><%= formatTime(article.time) %></span>
+
+浏览次数：<span><%= article.pv %></span>
+
+<br>
+
+<ul class="list">
+    <li>
+        <span>姓名</span> 
+        <span>2019-9233</span>
+        <img src="" alt="">
+        <p>你好</p>
+    </li>
+
+</ul>
+
+<script>
+    //请求评论列表
+    function loadList(){
+        $.ajax({
+            url:'/comment/list',
+            data:{
+                aid:$('#title').data('aid')
+            },
+            success:function(res){
+                console.log(res);
+                var html = '';
+                res.data.forEach(v => {
+                    html += `<li>
+                        <img src='${v.user.headImgUrl}' width='50px'>
+                        <span>${v.user.username}</span>:
+                        ${v.content}
+                        
+                        
+                        </li>`;
+                });
+                $('.list').html(html)
+
+
+            }
+        })
+    }
+
+    loadList();
+
+</script>
+
+
+<input type="text" id="con-ipt">
+<input type="button" value="评论" id="cbtn">
+
+<script>
+    // 前端调用发表评论
+
+    $('#cbtn').click(function(){
+        var content = $('#con-ipt').val();
+        //data-aid
+        var userid = $('#title').data('userid');
+        var aid = $('#title').data('aid');
+        console.log(userid);
+        $.ajax({
+            url:'/comment',
+            type:'get',
+            data:{
+                content,userid,aid
+            },
+            success:function(res){
+                console.log(res);
+                loadList();
+            },
+            error:function(error){
+                console.log(error);
+            }
+        })
+
+    })
+
+</script>
+
+
+
+
+
+
+
+
+
+
+
+</body>
+
+</html>

@@ -1,0 +1,80 @@
+
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title><%= title  %></title>
+        <script src="/js/jquery.min.js"></script>
+    
+        <!-- Bootstrap core CSS -->
+        <link href="/css/bootstrap.min.css" rel="stylesheet">
+    
+        <!-- Custom styles for this template -->
+        <link href="/css/signin.css" rel="stylesheet">
+        <link href="/css/dashboard.css" rel="stylesheet">
+    </head>
+    <body>
+    
+    <div>
+    
+        <h1>博客后台系统</h1>
+        
+        
+        
+    </div>
+    <h2><%= title %></h2>
+
+
+    
+    <div class="container">
+
+            <form class="form-signin">
+              <h2 class="form-signin-heading">请登录</h2>
+              <label for="inputEmail" class="sr-only">Email address</label>
+              <input type="text" id="un" class="form-control" placeholder="用户名" required autofocus>
+              <label for="inputPassword" class="sr-only">Password</label>
+              <input type="password" id="pd" class="form-control" placeholder="密码" required>
+          
+              <button id="btn" class="btn btn-lg btn-primary btn-block" type="button">登录</button>
+            </form>
+            
+          </div> <!-- /container -->
+
+<!-- 
+    <input type="text" name="un" id="un">
+    <input type="text" name="pd" id="pd">
+    <input type="button" value="登录" id="btn"> -->
+
+<script>
+// ajax  post 
+$('#btn').click(function(){
+$.ajax({
+    url:'/admin/api-login',
+    type:'post',
+    data:{
+        un:$('#un').val(),
+        pd:$('#pd').val()
+    },
+    success:function(res){
+        console.log(res);
+        if(res.code == 1){
+            alert(res.msg)
+            location.href = '/admin/';
+        }else{
+            alert(res.msg)
+        }
+    },
+    error:function(error){
+        console.log(error);
+    }
+
+})
+})
+
+</script>
+
+
+</body>
+</html>

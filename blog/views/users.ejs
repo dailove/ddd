@@ -1,0 +1,71 @@
+<% include header %>
+
+<!-- 用户名页面 -->
+
+<img src="<%= user.headImgUrl %>" alt=""  class="img-thumbnail" width="150px">
+
+<h3>头像上传：</h3>
+选择一个文件上传: <br/>
+<form action="/users/file_upload" method="post" enctype="multipart/form-data">
+    <input type="file" name="image" size="50" />
+    <br/>
+    <input type="submit" value="上传文件" />
+</form>
+
+
+
+
+<ul class="list">
+    <% for(var i=0;i<data.length;i++){ %>
+    <li>
+        <a href="/users/article/<%= data[i]._id %>">
+            <h2>
+                <%= data[i].title %>
+            </h2>
+        </a>
+        <p>作者：<span>
+                <%= data[i].username %> </span></p>
+        <p>时间：<span>
+                <%= formatTime(data[i].time) %> </span></p>
+    </li>
+    <% } %>
+</ul>
+
+
+<% if(username){ %>
+
+<form action="/users/publish" method="post">
+
+    标题： <input type="text" name="title">
+    <br>
+    内容：
+    <!-- <textarea id="" cols="30" rows="10" name="content"></textarea> -->
+    <script name='content' id="editor" type="text/plain" style="width:624px;height:300px;"></script>
+    <br>
+
+    <input type="submit" value="发表">
+
+</form>
+
+
+<% } %>
+
+<!-- 配置文件 -->
+<script type="text/javascript" charset="utf-8" src="/ueditor/ueditor.config.js"></script>
+<script type="text/javascript" charset="utf-8" src="/ueditor/ueditor.all.min.js">
+</script>
+<script type="text/javascript" charset="utf-8" src="/ueditor/lang/zh-cn/zh-cn.js">
+</script>
+<!-- 实例化编辑器 -->
+<script type="text/javascript">
+  var ue = UE.getEditor('editor');
+</script>
+
+
+
+
+
+
+</body>
+
+</html>

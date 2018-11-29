@@ -1,0 +1,84 @@
+<% include header %>
+
+<link rel="stylesheet" type="text/css" href="/css/verify.css">
+<script type="text/javascript" src="/js/jquery.min.js"></script>
+<script type="text/javascript" src="/js/verify.js"></script>
+
+<h2>
+    <%= title  %>
+</h2>
+
+
+<div class="container">
+
+    <form class="form-signin">
+        <h2 class="form-signin-heading">请注册</h2>
+        <label for="inputEmail" class="sr-only">Email address</label>
+        <input type="text" id="un" class="form-control" placeholder="用户名" required autofocus>
+        <label for="inputPassword" class="sr-only">Password</label>
+        <input type="password" id="pd" class="form-control" placeholder="密码" required>
+
+
+        <div id="mpanel2">
+        </div>
+
+        <button id="btn" class="btn btn-lg btn-primary btn-block" type="button">注册</button>
+    </form>
+
+</div> <!-- /container -->
+
+<script>
+    $('#mpanel2').codeVerify({
+        type: 2,
+        figure: 100, //位数，仅在type=2时生效
+        arith: 0, //算法，支持加减乘，不填为随机，仅在type=2时生效
+        width: '200px',
+        height: '50px',
+        fontSize: '30px',
+        btnId: 'btn',
+        ready: function () {},
+        success: function () {
+            // alert('验证匹配！');
+
+            $.ajax({
+                url: '/users/api-register',
+                type: 'post',
+                data: {
+                    un: $('#un').val(),
+                    pd: $('#pd').val()
+                },
+                success: function (res) {
+                    console.log(res);
+                    if (res.code == 1) {
+                        alert(res.msg)
+                        location.href = '/users/login';
+                    } else {
+                        alert(res.msg)
+                    }
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+
+            })
+
+
+
+        },
+        error: function () {
+            alert('验证码不匹配！');
+        }
+    });
+
+
+
+    // ajax  post 
+    $('#btn').click(function () {
+
+    })
+</script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,76 @@
+
+    <% include header %>
+    <link rel="stylesheet" type="text/css" href="/css/verify.css">
+    <h2><%= title %></h2>
+
+
+    
+    <div class="container">
+
+            <form class="form-signin">
+              <h2 class="form-signin-heading">请登录</h2>
+              <label for="inputEmail" class="sr-only">Email address</label>
+              <input type="text" id="un" class="form-control" placeholder="用户名" required autofocus>
+              <label for="inputPassword" class="sr-only">Password</label>
+              <input type="password" id="pd" class="form-control" placeholder="密码" required>
+              <div id="mpanel3" style="margin-top: 20px"></div>
+                
+              <button id="btn" class="btn btn-lg btn-primary btn-block" type="button">登录</button>
+            </form>
+      
+          </div> <!-- /container -->
+
+<!-- 
+    <input type="text" name="un" id="un">
+    <input type="text" name="pd" id="pd">
+    <input type="button" value="登录" id="btn"> -->
+
+    <script type="text/javascript" src="/js/verify.js" ></script>
+    <script>
+    
+     $('#mpanel3').codeVerify({
+                    type : 2,
+                    figure : 100,	//位数，仅在type=2时生效
+                    arith : 0,	//算法，支持加减乘，不填为随机，仅在type=2时生效
+                    width : '200px',
+                    height : '50px',
+                    fontSize : '30px',
+                    btnId : 'btn',
+                    ready : function() {
+                    },
+                    success : function() {
+                       // alert('验证匹配！');
+                        $.ajax({
+                url:'/users/api-login',
+                type:'post',
+                data:{
+                    un:$('#un').val(),
+                    pd:$('#pd').val()
+                },
+                success:function(res){
+                    if(res.code == 1){
+                        alert(res.msg);
+                        location.href = '/users'
+                    }else{
+                        alert(res.msg)
+                    }
+                },
+                error:function(error){
+                    console.log(error)
+                }
+            })
+    
+                    },
+                    error : function() {
+                        alert('验证码不匹配！');
+                    }
+                });
+    
+        // $('#btn').click(function(){
+            
+        // })
+    </script>
+
+
+</body>
+</html>

@@ -1,0 +1,10 @@
+mvc（后端）
+
+model 模式  （数据库）
+view  视图   （html，html模板）
+controller  控制 （路由）
+
+前端
+mvvm （微软 桌面应用）
+（vue  react）
+微信小程序

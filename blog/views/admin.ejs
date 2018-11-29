@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>
+    <%= title  %>
+  </title>
+  <script src="/js/jquery.min.js"></script>
+
+  <!-- Bootstrap core CSS -->
+  <link href="/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Custom styles for this template -->
+  <link href="/css/signin.css" rel="stylesheet">
+  <link href="/css/dashboard.css" rel="stylesheet">
+  <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+
+  <% if(username=='admin'){ %>
+  <nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+          aria-expanded="false" aria-controls="navbar">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="#">博客后台管理系统</a>
+      </div>
+      <div id="navbar" class="navbar-collapse collapse">
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="#">
+              <%= title%></a></li>
+          <li><a href="#">设置</a></li>
+          <li><a href="#">帮助</a></li>
+        </ul>
+        <form class="navbar-form navbar-right">
+          <input type="text" class="form-control" placeholder="Search...">
+        </form>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-sm-3 col-md-2 sidebar">
+        <ul class="nav nav-sidebar">
+          <li class="active art"><a href="/admin">文章 <span class="sr-only">(current)</span></a></li>
+          <li class="gu"><a href="/admin/ctrUser">管理用户</a></li>
+          <li class="addArt"><a href="/admin/addArticle">发表文章</a></li>
+          <li><a href="/admin/echart">统计</a></li>
+          <li><a href="/admin/layout">退出</a></li>
+        </ul>
+
+      </div>
+      <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main articleList">
+
+        <h2 class="sub-header">文章列表</h2>
+        <div class="table-responsive">
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                
+                <th>标题</th>
+                <th>作者</th>
+                <th>访问量</th>
+                <th>发表时间</th>
+                <th>操作</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% for(var i=0;i<data.length;i++){ %>
+              <tr>
+                
+                <td id="title">
+                  <%= data[i].title %>
+                </td>
+                <td>
+                  <%= data[i].username %>
+                </td>
+                <td>
+                  <%= data[i].pv?data[i].pv:0 %>
+                </td>
+                <td>
+                  <%= formatTime(data[i].time) %>
+                </td>
+                <td>
+                  <a href="/admin/del/<%= data[i]._id %>" class="btn btn-primary btn-lg">删除</a>
+                  <a href="#myModal" id="btn" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal" data-aid="<%= data[i]._id%>">编辑</a>
+                </td>
+                <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+                  aria-hidden="true">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title" id="myModalLabel">模态框（Modal）标题</h4>
+                      </div>
+                      <div class="modal-body">
+                        
+
+                          标题： <input type="text" name="title" id="titl">
+                          <br>
+                          内容：
+                          <textarea id="content" cols="30" rows="10" name="content"></textarea>
+
+                          <br>
+
+
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                        <button type="button" class="btn btn-primary" id="ibtn">提交更改</button>
+                      </div>
+                    </div><!-- /.modal-content -->
+                  </div><!-- /.modal -->
+                </div>
+              </tr>
+              <% } %>
+            </tbody>
+
+          </table>
+          <% if(pageNum > 1){%>
+          <a href="<%= pUrl %>">上一页</a>
+          <% } %>
+
+          <% if(pages>=5){  for(var i=pageNum;i<=5+pageNum;i++) { %>
+
+          <% if(pageNum == i){ %>
+          <%= i %>
+          <% }else { %>
+          <a href="/admin/page/<%= i %>">
+            <%= i %> </a>
+          <% }%>
+
+
+          <% } } %>
+
+
+          <a href="<%= nUrl %>">下一页</a>
+        </div>
+      </div>
+
+
+
+
+    </div>
+
+
+
+  </div>
+
+  <script>
+    // $('.addArt').click(function(){
+    //   $('.main').css('display','none');
+    //   $('.addArticle').css('display','block');
+    //   $('li').removeClass('active');
+    //   $('.addArt').addClass('active');
+
+    // })
+    // $('.gu').click(function(){
+    //   $('.main').css('display','none');
+    //   $('.ctrUser').css('display','block');
+    //   $('li').removeClass('active');
+    //   $('.gu').addClass('active');
+
+    // })
+
+    $(function () {
+      $("tbody").on("click", "#btn", function () {
+        var aid = $(this).data('aid');
+        // console.log(aid);
+        $.ajax({
+          url: '/admin/update/' + aid,
+          type: 'get',
+          success: function (res) {
+            console.log(res.data[0].title);
+
+            $('#titl').val(res.data[0].title);
+            $('#content').text(res.data[0].content);
+            $('#ibtn').click(function () {
+              $.ajax({
+                url: '/admin/api-update/',
+                type: 'get',
+                data: {
+                  aid,
+                  ti: $('#titl').val(),
+                  con: $('#content').val()
+                },
+                success: function (res) {
+                  console.log(res);
+                  if (res.code == 1) {
+                    alert(res.msg)
+                    location.href = '/admin/';
+                  } else {
+                    alert(res.msg)
+                  }
+                },
+                error: function (error) {
+                  console.log(error);
+                }
+
+              })
+            })
+
+          }
+        })
+      })
+    })
+  </script>
+  <% } else{ %>
+    <h3>对不起，请先<a href="/admin/login/">登录</a></h3>
+  <% } %>
+
+</body>
+
+</html>

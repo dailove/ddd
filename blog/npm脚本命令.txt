@@ -1,0 +1,4 @@
+在 package.json 文件中 
+
+script  start       npm start
+script  dev         npm run  dev
