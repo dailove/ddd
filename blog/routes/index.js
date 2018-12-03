@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 
 var MongoClient = require('mongodb').MongoClient;
+var ObjectID = require('mongodb').ObjectID;
 var url = 'mongodb://localhost:27017'
 var dbname = 'czblog';
 var articleB  = 'article';
@@ -44,7 +45,7 @@ router.get('/', function(req, res, next) {
         var pages = Math.ceil(count/pageSize)
 
           db.collection('article').find({}).limit(3).sort({pv:-1}).toArray((error,hot) => {
-            console.log(hot,1111111111);
+            // console.log(hot,1111111111);
             res.render('index', {
           title: '首页',
           username: req.session.username,
@@ -92,7 +93,7 @@ router.get('/page/:num',(req,res) => {
         var pages = Math.ceil(count/pageSize)
 
         db.collection('article').find({}).limit(3).sort({pv:-1}).toArray((error,hot) => {
-          console.log(hot,1111111111);
+          // console.log(hot,1111111111);
           res.render('index', {
         title: '首页',
         username: req.session.username,
@@ -110,14 +111,32 @@ router.get('/page/:num',(req,res) => {
         
       })
      
-
     })
   })
 
-
-
-
 })
+
+//收藏文章
+router.get('/collect/:aid',(req,res) => {
+  
+  var aid = new ObjectID(req.params.aid);
+  var userid = new ObjectID(req.session.userid);
+  console.log(aid,userid,8888888888);
+  MongoClient.connect(url,(error,dbC) => {
+    var db = dbC.db(dbname);
+    db.collection('user').update({'_id':userid},{$push:{aid:aid}},(err,data) => {
+      if(err) throw error;
+      console.log(data,9999999999999);
+      res.json({
+        code:1,
+        msg:'收藏成功'
+      })
+    })
+
+
+  })
+})
+
 
 
 module.exports = router;

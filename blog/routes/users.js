@@ -132,7 +132,6 @@ router.post('/api-register', (req, res) => {
 
 })
 
-
 // 登录页面
 router.get('/login', function (req, res) {
   res.render('login', {
@@ -320,5 +319,31 @@ router.get('/api/tj-a1',(req,res) => {
 
 })
 
+//收藏页面
+router.get('/collect',(req,res) => {
+  console.log(req.session.userid,77777777777);
+  var userid = new ObjectID(req.session.userid);
+  
+  MongoClient.connect(url,(error,dbC) => {
+    var db = dbC.db(dbname);
+    db.collection('user').find({'_id':userid}).toArray((error,data) => {
+      console.log(data,6666666666666666);
+      var arr = data[0].aid;
+      
+      
+        db.collection('article').find({'_id':{$in:arr}}).toArray((error,resoult) => {
+        
+          console.log(resoult,33333333333);
+          res.render('collect',{
+            title:'收藏',
+            username:req.session.username,
+            resoult,
+            formatTime
+          })
+        })
+      
+    })
+  })
+})
 
 module.exports = router;

@@ -47,7 +47,6 @@
                     <%= hot[1].username%></span>
                 <span>浏览量：
                     <%= hot[1].pv%></span>
-
             </div>
         </div>
         <div class="item">
@@ -66,7 +65,7 @@
                     <%= hot[2].username%></span>
                 <span>浏览量：
                     <%= hot[2].pv%></span>
-
+                   
             </div>
         </div>
     </div>
@@ -83,7 +82,7 @@
 
 <ul class="list">
     <% for(var i=0;i<data.length;i++){ %>
-    <li>
+    <li class="arti">
         <a href="/users/article/<%= data[i]._id %>">
             <h2>
                 <%= data[i].title %>
@@ -95,7 +94,7 @@
                 <%= formatTime(data[i].time) %> </span></p>
         <p>浏览次数：<span>
                 <%= data[i].pv?data[i].pv:0 %> </span></p>
-
+           <button id="collect" data-aid='<%= data[i]._id %>'>收藏</button>
     </li>
     <% } %>
 
@@ -139,7 +138,27 @@
 
 
 
+<script>
 
+    $('.arti').on('click','#collect',function(){
+        var aid = $(this).data('aid')
+        $.ajax({
+            url:'/collect/'+aid,
+            type:'get',
+            success:function(res){
+                console.log(res);
+                if(res.code==1){
+                    alert(res.msg)
+                }else{
+                    alert('收藏失败')
+                }
+            }
+        })
+    })
+
+    
+
+</script>
 
 
 </body>

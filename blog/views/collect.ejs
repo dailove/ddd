@@ -1,0 +1,41 @@
+<% include header %>
+
+<!-- 用户名页面 -->
+
+
+
+
+
+
+
+
+<% if(username&&resoult.length){ %>
+
+<ul class="list">
+    <% for(var i=0;i<resoult.length;i++){ %>
+    <li>
+        <a href="/users/article/<%= resoult[i]._id %>">
+            <h2>
+                <%= resoult[i].title %>
+            </h2>
+        </a>
+        <p>作者：<span>
+                <%= resoult[i].username %> </span></p>
+        <p>时间：<span>
+                <%= formatTime(resoult[i].time) %> </span></p>
+                <a href="#">移出收藏</a>
+    </li>
+    <% } %>
+</ul>
+
+
+<% } %>
+
+
+
+
+
+
+</body>
+
+</html>
